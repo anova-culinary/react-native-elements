@@ -110,7 +110,7 @@ class SearchBar extends Component {
             inputContainerStyle,
           ])}
           leftIcon={
-            hasFocus
+            (hasFocus || !isEmpty)
               ? renderNode(Icon, cancelIcon, {
                   ...defaultCancelIcon,
                   onPress: this.cancel,

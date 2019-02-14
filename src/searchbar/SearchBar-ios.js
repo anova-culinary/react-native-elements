@@ -130,7 +130,7 @@ class SearchBar extends Component {
           }}
           inputContainerStyle={StyleSheet.flatten([
             styles.inputContainer,
-            hasFocus && { marginRight: this.state.cancelButtonWidth },
+            (hasFocus || !isEmpty) && { marginRight: this.state.cancelButtonWidth },
             inputContainerStyle,
           ])}
           leftIcon={renderNode(Icon, searchIcon, defaultSearchIcon)}
@@ -167,7 +167,7 @@ class SearchBar extends Component {
             styles.cancelButtonContainer,
             {
               opacity: this.state.cancelButtonWidth === null ? 0 : 1,
-              right: hasFocus ? 0 : -this.state.cancelButtonWidth,
+              right: (hasFocus || !isEmpty) ? 0 : -this.state.cancelButtonWidth,
             },
           ])}
           onLayout={event =>
