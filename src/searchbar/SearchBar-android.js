@@ -134,7 +134,13 @@ class SearchBar extends Component {
                 renderNode(Icon, clearIcon, {
                   ...defaultClearIcon,
                   key: 'cancel',
-                  onPress: this.clear,
+                  onPress: () => {
+                    this.clear()
+
+                    if (!this.input.isFocused()) {
+                      this.focus()
+                    }
+                  },
                 })}
             </View>
           }
