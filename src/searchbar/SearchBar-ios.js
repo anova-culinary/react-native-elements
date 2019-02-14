@@ -57,6 +57,7 @@ class SearchBar extends Component {
   };
 
   cancel = () => {
+    this.clear();
     this.blur();
     this.props.onCancel();
   };
