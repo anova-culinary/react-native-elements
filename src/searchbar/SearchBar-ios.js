@@ -38,6 +38,7 @@ class SearchBar extends Component {
       hasFocus: false,
       isEmpty: value ? value === '' : true,
       cancelButtonWidth: null,
+      isBeingClearedWhileUnfocused: false
     };
   }
 
@@ -66,6 +67,7 @@ class SearchBar extends Component {
 
     this.setState({
       hasFocus: true,
+      isBeingClearedWhileUnfocused: false
     });
   };
 
@@ -99,7 +101,7 @@ class SearchBar extends Component {
       searchIcon,
       ...attributes
     } = this.props;
-    const { hasFocus, isEmpty } = this.state;
+    const { hasFocus, isEmpty, isBeingClearedWhileUnfocused } = this.state;
 
     const { style: loadingStyle, ...otherLoadingProps } = loadingProps;
 
@@ -130,7 +132,7 @@ class SearchBar extends Component {
           }}
           inputContainerStyle={StyleSheet.flatten([
             styles.inputContainer,
-            (hasFocus || !isEmpty) && { marginRight: this.state.cancelButtonWidth },
+            (hasFocus || !isEmpty || isBeingClearedWhileUnfocused) && { marginRight: this.state.cancelButtonWidth },
             inputContainerStyle,
           ])}
           leftIcon={renderNode(Icon, searchIcon, defaultSearchIcon)}
@@ -153,11 +155,15 @@ class SearchBar extends Component {
                   ...defaultClearIcon,
                   key: 'cancel',
                   onPress: () => { 
-                    this.clear()
-                    
                     if (!this.input.isFocused()) {
+                      this.setState({ isBeingClearedWhileUnfocused: true })
+
+                      this.clear()
+
                       this.focus()
-                    }
+                    } else {
+                      this.clear()
+                    }                  
                   },
                 })}
             </View>
@@ -173,7 +179,7 @@ class SearchBar extends Component {
             styles.cancelButtonContainer,
             {
               opacity: this.state.cancelButtonWidth === null ? 0 : 1,
-              right: (hasFocus || !isEmpty) ? 0 : -this.state.cancelButtonWidth,
+              right: (hasFocus || !isEmpty || isBeingClearedWhileUnfocused) ? 0 : -this.state.cancelButtonWidth,
             },
           ])}
           onLayout={event =>
